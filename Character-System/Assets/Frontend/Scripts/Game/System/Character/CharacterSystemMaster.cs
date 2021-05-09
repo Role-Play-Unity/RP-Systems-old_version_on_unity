@@ -38,6 +38,14 @@ public class CharacterSystemMaster : MonoBehaviour
         Vector3 _rotation = new Vector3(0f, _yRot, 0f) * lookSensitivity;
 
         //Apply rotation
-        motor.Rotation(_rotation);
+        motor.Rotate(_rotation);
+
+        //Calculate head rotation as a 3D vector (turning around)
+        float _xRot = Input.GetAxisRaw("Mouse Y");
+
+        Vector3 _headRotation = new Vector3(_xRot, 0f, 0f) * lookSensitivity;
+
+        //Apply rotation
+        motor.HeadRotate(_headRotation);
     }
 }

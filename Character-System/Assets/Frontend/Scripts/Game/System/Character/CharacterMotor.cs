@@ -5,8 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class CharacterMotor : MonoBehaviour
 {
+    [SerializeField] private Transform head;
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
+    private Vector3 headRotation = Vector3.zero;
 
     private Rigidbody rb;
 
@@ -20,8 +22,14 @@ public class CharacterMotor : MonoBehaviour
     {
         velocity = _velocity;
     }
-    //Gets a rotation vector
-    public void Rotation(Vector3 _rotation)
+    //Gets a rotational vector for the head
+    public void HeadRotate(Vector3 _headRotation)
+    {
+        headRotation = _headRotation;
+    }
+    
+    //Gets a rotational vector
+    public void Rotate(Vector3 _rotation)
     {
         rotation = _rotation;
     }
@@ -30,6 +38,7 @@ public class CharacterMotor : MonoBehaviour
     {
         PerformMovement();
         PerformRotation();
+        PerformHeadRotation();
     }
 
     //Perform movement base on velocity variable
@@ -48,6 +57,15 @@ public class CharacterMotor : MonoBehaviour
         if (velocity != Vector3.zero)
         {
             rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+        }
+    }
+
+    //Perform head rotation base on velocity variable
+    void PerformHeadRotation()
+    {
+        if(head != null)
+        {
+            head.Rotate(-headRotation);
         }
     }
 }
