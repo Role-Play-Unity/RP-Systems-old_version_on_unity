@@ -8,7 +8,8 @@ public class CharacterMotor : MonoBehaviour
     [SerializeField] private Transform head;
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
-    private Vector3 headRotation = Vector3.zero;
+    private Vector3 headRotation;
+    private Vector3 jampForces = Vector3.zero;
 
     private Rigidbody rb;
 
@@ -23,7 +24,7 @@ public class CharacterMotor : MonoBehaviour
         velocity = _velocity;
     }
     //Gets a rotational vector for the head
-    public void HeadRotate(Vector3 _headRotation)
+    public void HeadRotate(Vector2 _headRotation)
     {
         headRotation = _headRotation;
     }
@@ -67,5 +68,13 @@ public class CharacterMotor : MonoBehaviour
         {
             head.Rotate(-headRotation);
         }
+    }
+
+
+
+    //Perform jamp base on velocity variable
+    void PerformJamp()
+    {
+
     }
 }

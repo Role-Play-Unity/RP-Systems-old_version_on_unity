@@ -6,11 +6,19 @@ using UnityEngine;
 public class CharacterSystemMaster : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 5f;
+    private float DefaultSpeed = 3f;
     [SerializeField]
-    private float lookSensitivity = 3f;
+    private float RunningSpeed = 6f;
+    [SerializeField]
+    private float CroughtSpeed = 1f;
+    [SerializeField]
+    private float mouseSensivity = 5f;
+    [SerializeField]
+    private float jampForces = 2f;
+    [SerializeField] private Vector2 headLimitRotation;
 
     private CharacterMotor motor;
+    [SerializeField] private CharacterHeadShake headShake;
 
     private void Start()
     {
@@ -26,26 +34,41 @@ public class CharacterSystemMaster : MonoBehaviour
         Vector3 _movHorizontal = transform.right * _xMov;
         Vector3 _movVertical = transform.forward * _zMov;
 
-        //final movement vector
-        Vector3 _velocity = (_movHorizontal + _movVertical).normalized * speed;
+        // 1/2 final movement vector
+        Vector3 _velocity = (_movHorizontal + _movVertical).normalized;
 
         //Apply movement
-        motor.Move(_velocity);
+        if (Input.GetKey(KeyCode.LeftShift)) // Run move
+            motor.Move(_velocity * RunningSpeed);
+        else if (Input.GetKey(KeyCode.LeftControl)) //Crought move
+            motor.Move(_velocity * CroughtSpeed);
+        else
+            motor.Move(_velocity * DefaultSpeed); //Defaut move
+
+        //
+        headShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
+        //
+        //Apply movement
+        /*motor.Move(_velocity);*/
 
         //Calculate rotation as a 3D vector
         float _yRot = Input.GetAxisRaw("Mouse X");
 
-        Vector3 _rotation = new Vector3(0f, _yRot, 0f) * lookSensitivity;
+        Vector3 _rotation = new Vector3(0f, _yRot, 0f) * mouseSensivity;
 
         //Apply rotation
         motor.Rotate(_rotation);
-
+        
         //Calculate head rotation as a 3D vector (turning around)
-        float _xRot = Input.GetAxisRaw("Mouse Y");
+        float _xRotMouse = Input.GetAxis("Mouse Y") * mouseSensivity;
 
-        Vector3 _headRotation = new Vector3(_xRot, 0f, 0f) * lookSensitivity;
+        Vector3 _headRotation = new Vector3(_xRotMouse, 0f);
 
         //Apply rotation
         motor.HeadRotate(_headRotation);
+
+        Vector3 _jamp = new Vector3(0f, 1f, 0f) * jampForces;
+
+       // motor.Jamp(_jamp);
     }
 }
