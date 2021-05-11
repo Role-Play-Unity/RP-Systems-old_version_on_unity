@@ -32,6 +32,7 @@ public class Client : MonoBehaviour
         System.Random rnd = new System.Random();
         PlayerID = rnd.Next(1, 99999999);
         PlayerName = rnd.Next(1, 99999999).ToString();
+        Player.name = PlayerName;
 
         _oldPosition = Vector3.zero;
         _newPlayerName = "";
@@ -52,16 +53,17 @@ public class Client : MonoBehaviour
                 InstantiateNewPlayer(_newPlayerPosition, _newPlayerName);
     }
 
+    [Obsolete]
     private void InstantiateNewPlayer(Vector3 position, string Name)
     {
-        if (!transform.Find(Name))
+        if (!transform.FindChild(Name))
         {
             GameObject obj = Instantiate(PlayerPrefab, position, Quaternion.identity).gameObject;
             obj.name = _newPlayerName;
         }
         else
         {
-            GameObject obj = transform.Find(_newPlayerName).gameObject;
+            GameObject obj = transform.FindChild(_newPlayerName).gameObject;
             obj.transform.position = position;
         }
     }
@@ -71,6 +73,8 @@ public class Client : MonoBehaviour
         System.Random rnd = new System.Random();
         PlayerID = rnd.Next(1, 99999999);
         PlayerName = rnd.Next(1, 99999999).ToString();
+
+        Player.name = PlayerName;
 
         _oldPosition = Vector3.zero;
         _newPlayerName = "";
@@ -143,14 +147,14 @@ public class Client : MonoBehaviour
                 {
                     byte[] receivedData = client.Receive(ref serverEP);
 
-                    PlayerData receivedPData = new PlayerData();
-                    receivedPData = JsonUtility.FromJson<PlayerData>(Encoding.ASCII.GetString(receivedData));
-
-                    if (receivedPData != null)
+                    if (Encoding.ASCII.GetString(receivedData) != " ")
                     {
+                        PlayerData receivedPData = new PlayerData();
+                        receivedPData = JsonUtility.FromJson<PlayerData>(Encoding.ASCII.GetString(receivedData));
+
                         print("Player: " + receivedPData.Name + " Vector3: " + receivedPData.Position.ToString());
 
-                        lock(_newPlayerName)
+                        lock (_newPlayerName)
                         {
                             _newPlayerName = receivedPData.Name;
                         }
