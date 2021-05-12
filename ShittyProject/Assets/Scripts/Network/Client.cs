@@ -49,22 +49,29 @@ public class Client : MonoBehaviour
         _playerPosition = Player.position;
 
         lock (_newPlayerName)
-            if (_newPlayerName != "" && _newPlayerName == PlayerName)
+            if (_newPlayerName != "")
                 InstantiateNewPlayer(_newPlayerPosition, _newPlayerName);
     }
 
     [Obsolete]
     private void InstantiateNewPlayer(Vector3 position, string Name)
     {
-        if (!transform.FindChild(Name))
+        print(Name + " " + GameObject.Find(Name));
+
+        GameObject plr = GameObject.Find(Name);
+
+        if (Name != PlayerName)
         {
-            GameObject obj = Instantiate(PlayerPrefab, position, Quaternion.identity).gameObject;
-            obj.name = _newPlayerName;
-        }
-        else
-        {
-            GameObject obj = transform.FindChild(_newPlayerName).gameObject;
-            obj.transform.position = position;
+            if (!GameObject.Find(Name))
+            {
+                GameObject obj = Instantiate(PlayerPrefab, position, Quaternion.identity).gameObject;
+                obj.name = _newPlayerName;
+            }
+            else
+            {
+                GameObject obj = GameObject.Find(_newPlayerName).gameObject;
+                obj.transform.position = position;
+            }
         }
     }
 
@@ -160,10 +167,7 @@ public class Client : MonoBehaviour
 
                         _newPlayerPosition = receivedPData.Position;
                     }
-                    catch
-                    { 
-                        
-                    }
+                    catch { }
 
                     //print("Player: " + receivedPData.Name + " Vector3: " + receivedPData.Position.ToString());
 
@@ -179,7 +183,7 @@ public class Client : MonoBehaviour
                     }*/
                 }
 
-                print(receivedData);
+                //print(receivedData);
             }
 
             Thread.Sleep(10);
