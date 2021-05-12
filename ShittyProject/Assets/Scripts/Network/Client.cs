@@ -91,68 +91,67 @@ public class Client : MonoBehaviour
         IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse(Ip), Port);
         client.Connect(serverEP);
 
-        try
-        {
+        //[] receivedData = client.Receive(ref ep);
+        //Console.WriteLine("receive data from " + ep.ToString());
 
-            //[] receivedData = client.Receive(ref ep);
-            //Console.WriteLine("receive data from " + ep.ToString());
+        //PlayerData receivedPData = new PlayerData();
+        //receivedPData = JsonUtility.FromJson<PlayerData>(ep.ToString());
 
-            //PlayerData receivedPData = new PlayerData();
-            //receivedPData = JsonUtility.FromJson<PlayerData>(ep.ToString());
-
-            Vector3 playerPosition = new Vector3((float)Math.Round(_playerPosition.x, 2),
-                                                 (float)Math.Round(_playerPosition.y, 2),
-                                                 (float)Math.Round(_playerPosition.z, 2));
-
-
-            PlayerData pdata = new PlayerData();
-            pdata.Id = PlayerID;
-            pdata.Name = PlayerName;
-            pdata.Position = playerPosition;
-
-            string jsonData = JsonUtility.ToJson(pdata);
-
-            byte[] connectedMessage = Encoding.ASCII.GetBytes(jsonData);
-            client.Send(connectedMessage, connectedMessage.Length);
-
-            //PlayerID = int.Parse(ep.ToString());
-
-            while (true)
-            {
-                if (!client.Client.Connected)
-                    return;
-
-                playerPosition = new Vector3((float)Math.Round(_playerPosition.x, 2),
+        Vector3 playerPosition = new Vector3((float)Math.Round(_playerPosition.x, 2),
                                              (float)Math.Round(_playerPosition.y, 2),
                                              (float)Math.Round(_playerPosition.z, 2));
 
-                PlayerData d = new PlayerData();
-                d.Position = playerPosition;
-                d.Name = PlayerName;
-                d.Id = PlayerID;
 
-                string json = JsonUtility.ToJson(d);
+        PlayerData pdata = new PlayerData();
+        pdata.Id = PlayerID;
+        pdata.Name = PlayerName;
+        pdata.Position = playerPosition;
 
-                byte[] msg = Encoding.ASCII.GetBytes(json);
-                byte[] nothing = Encoding.ASCII.GetBytes(" ");
+        string jsonData = JsonUtility.ToJson(pdata);
 
-                if (playerPosition != _oldPosition)
-                    client.Send(msg, msg.Length);
-                else
-                    client.Send(nothing, nothing.Length);
+        byte[] connectedMessage = Encoding.ASCII.GetBytes(jsonData);
+        client.Send(connectedMessage, connectedMessage.Length);
 
-                _oldPosition = playerPosition;
+        //PlayerID = int.Parse(ep.ToString());
 
-                if (client.Available > 0)
+        while (true)
+        {
+            if (!client.Client.Connected)
+                return;
+
+            playerPosition = new Vector3((float)Math.Round(_playerPosition.x, 2),
+                                         (float)Math.Round(_playerPosition.y, 2),
+                                         (float)Math.Round(_playerPosition.z, 2));
+
+            PlayerData d = new PlayerData();
+            d.Position = playerPosition;
+            d.Name = PlayerName;
+            d.Id = PlayerID;
+
+            string json = JsonUtility.ToJson(d);
+
+            byte[] msg = Encoding.ASCII.GetBytes(json);
+            byte[] nothing = Encoding.ASCII.GetBytes(" ");
+
+            if (playerPosition != _oldPosition)
+                client.Send(msg, msg.Length);
+            else
+                client.Send(nothing, nothing.Length);
+
+            _oldPosition = playerPosition;
+
+            if (client.Available > 0)
+            {
+                byte[] receivedData = client.Receive(ref serverEP);
+
+                print(Encoding.ASCII.GetString(receivedData));
+
+                if (Encoding.ASCII.GetString(receivedData) != " ")
                 {
-                    byte[] receivedData = client.Receive(ref serverEP);
-
-                    if (Encoding.ASCII.GetString(receivedData) != " ")
+                    PlayerData receivedPData = new PlayerData();
+                    try
                     {
-                        PlayerData receivedPData = new PlayerData();
                         receivedPData = JsonUtility.FromJson<PlayerData>(Encoding.ASCII.GetString(receivedData));
-
-                        print("Player: " + receivedPData.Name + " Vector3: " + receivedPData.Position.ToString());
 
                         lock (_newPlayerName)
                         {
@@ -160,30 +159,30 @@ public class Client : MonoBehaviour
                         }
 
                         _newPlayerPosition = receivedPData.Position;
-
-                        /*if (!transform.parent.Find(receivedPData.Name))
-                        {
-                            GameObject obj = Instantiate(PlayerPrefab, receivedPData.Position, Quaternion.identity).gameObject;
-                            obj.name = receivedPData.Name;
-                        }
-                        else
-                        {
-                            GameObject obj = transform.parent.Find(receivedPData.Name).gameObject;
-                            obj.transform.position = receivedPData.Position;
-                        }*/
+                    }
+                    catch
+                    { 
+                        
                     }
 
-                    print(receivedData);
+                    //print("Player: " + receivedPData.Name + " Vector3: " + receivedPData.Position.ToString());
+
+                    /*if (!transform.parent.Find(receivedPData.Name))
+                    {
+                        GameObject obj = Instantiate(PlayerPrefab, receivedPData.Position, Quaternion.identity).gameObject;
+                        obj.name = receivedPData.Name;
+                    }
+                    else
+                    {
+                        GameObject obj = transform.parent.Find(receivedPData.Name).gameObject;
+                        obj.transform.position = receivedPData.Position;
+                    }*/
                 }
 
-                Thread.Sleep(10);
+                print(receivedData);
             }
 
-            
-        }
-        catch (Exception ex)
-        {
-            print(ex.ToString());
+            Thread.Sleep(10);
         }
 
         client.Close();
