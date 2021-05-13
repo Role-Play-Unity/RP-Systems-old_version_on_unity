@@ -28,6 +28,4 @@ public static class MouseController
     {
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
-
-
 }
