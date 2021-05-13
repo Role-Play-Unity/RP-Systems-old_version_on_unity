@@ -74,6 +74,9 @@ public class CharacterController : MonoBehaviour
 
         Vector3 _jamp = new Vector3(0f, 1f, 0f) * jampForces;
 
-       // motor.Jamp(_jamp);
+        // motor.Jamp(_jamp);
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+            MouseController.CursorVisible();
     }
 }
