@@ -19,4 +19,15 @@ public static class MouseController
         return isVisible;
     }
 
+    public static void SetTextureForCursor(Texture2D texture, Vector2 hotSpot)
+    {
+        Cursor.SetCursor(texture, hotSpot, CursorMode.Auto);
+    }
+    
+    public static void SetDefautTextureForCursor()
+    {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+
 }
