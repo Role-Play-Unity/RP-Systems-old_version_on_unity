@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterMotor))]
-public class CharacterSystemMaster : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     [SerializeField]
     private float DefaultSpeed = 3f;
