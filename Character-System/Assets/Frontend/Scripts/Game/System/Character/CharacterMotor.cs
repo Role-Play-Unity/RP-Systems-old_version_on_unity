@@ -66,7 +66,8 @@ public class CharacterMotor : MonoBehaviour
     {
         if(head != null)
         {
-            head.Rotate(-headRotation);
+            //head.Rotate(-headRotation);
+            head.localEulerAngles =-headRotation;
         }
     }
 

@@ -20,6 +20,9 @@ public class CharacterController : MonoBehaviour
     private CharacterMotor motor;
     [SerializeField] private CharacterHeadShake headShake;
 
+    private float _xRotMouse;
+    private float _yRotMouse;
+
     private void Start()
     {
         motor = GetComponent<CharacterMotor>();
@@ -60,7 +63,9 @@ public class CharacterController : MonoBehaviour
         motor.Rotate(_rotation);
         
         //Calculate head rotation as a 3D vector (turning around)
-        float _xRotMouse = Input.GetAxis("Mouse Y") * mouseSensivity;
+        _xRotMouse += Input.GetAxis("Mouse Y") * mouseSensivity;
+
+        _xRotMouse = Mathf.Clamp(_xRotMouse, headLimitRotation.x, headLimitRotation.y);
 
         Vector3 _headRotation = new Vector3(_xRotMouse, 0f);
 
