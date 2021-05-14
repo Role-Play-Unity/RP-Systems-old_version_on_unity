@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace System.Inventory
 {
-    public class InventoryMaster : InventoryData, ISync
+    public class InventoryMaster : InventoryData, IInventoryMaster
     {
-        public void GetItems()
+        void IInventoryMaster.AddItems(InventoryItem item, int amout)
         {
-            throw new System.NotImplementedException();
+            //foreach(var item in items)
         }
 
-        public void SaveItems()
+        void IInventoryMaster.SaveItems()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 

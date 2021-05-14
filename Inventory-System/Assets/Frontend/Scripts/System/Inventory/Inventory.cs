@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace System.Inventory {
+    public interface IInventoryMaster
+    {
+        public void AddItems(InventoryItem item, int amout = 1);
+        public void SaveItems();
+    }
     public interface ISync
     {
         public void GetItems();
