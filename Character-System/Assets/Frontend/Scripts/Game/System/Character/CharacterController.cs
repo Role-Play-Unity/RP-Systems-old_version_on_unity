@@ -42,7 +42,7 @@ public class CharacterController : MonoBehaviour
         Vector3 _movVertical = transform.forward * _movementInput.y;
         _velocity = (_movHorizontal + _movVertical).normalized;
         //Apply movement
-        if (_movementInput.y > 0.5f)
+        if (_movementInput.y > 0.7f)
         {
             motor.Move(_velocity * RunningSpeed); //Run move
             headShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
@@ -57,12 +57,13 @@ public class CharacterController : MonoBehaviour
     }
     private void CharacterRotation(Vector2 _rotationInput)
     {
-        //_yHeadRot = _rotationInput.x * mouseSensivity;
+        _yHeadRot = _rotationInput.x * mouseSensivity;
         //_yHeadRot = Mathf.Clamp(_xHeadRot, headLimitRotation.z, headLimitRotation.w);
         Vector3 rotation = new Vector3(0f, _yHeadRot, 0f) * mouseSensivity;
         //Apply rotation
         motor.Rotate(rotation);
         CharacterHeadRotation(_rotationInput);
+        Debug.Log("rotation input " + _rotationInput);
     }
     private void CharacterHeadRotation(Vector2 _headRotationInput)
     {

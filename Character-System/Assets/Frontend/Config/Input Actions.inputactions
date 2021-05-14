@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "463fcd8a-b6ad-4990-8cac-f42f53914236",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -15,7 +15,7 @@
                 },
                 {
                     "name": "Rotation",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "332eec15-8a94-431f-8ec0-261d51323a1a",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -23,7 +23,7 @@
                 },
                 {
                     "name": "Actions",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "039ba1e1-8c42-438a-957d-aac4baa2c3db",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -31,7 +31,7 @@
                 },
                 {
                     "name": "Jamp",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "0feae6cc-59c3-4298-b8d1-f2bd2b1f0e0f",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -41,7 +41,7 @@
                     "name": "OpenUI",
                     "type": "PassThrough",
                     "id": "7552d82d-3402-48ed-8bb4-fd3a23996db9",
-                    "expectedControlType": "Key",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -72,7 +72,7 @@
                 {
                     "name": "",
                     "id": "7fe4b30d-c74e-4745-afea-5ddf680c6448",
-                    "path": "<Mouse>/position",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
@@ -255,6 +255,77 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Car",
+            "id": "9d15df3b-016b-48d9-ba65-4544b133fd37",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "8287cab0-fccb-493d-83d3-fd9e677fefa4",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "2D Vector",
+                    "id": "aca97cea-82cd-42d9-95be-e508e4d6c9a2",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "06523427-3d95-4865-851e-69680c4de46f",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "cd0a1c8a-a87e-44c4-8e0b-a1af25de2bc3",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "af5b0289-6e3c-4b77-b0c5-a04f5ffdaf8e",
+                    "path": "<Gamepad>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "c8b9bb48-7ddd-4f49-9a0f-c96716b9da36",
+                    "path": "<Gamepad>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
