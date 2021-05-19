@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(MouseLook))]
+[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(CharacterMotor))]
 [RequireComponent(typeof(CharacterHeadShake))]
 public class CharacterController : MonoBehaviour
 {
+    #region Variables
     [SerializeField]
     private float DefaultSpeed = 3f;
     [SerializeField]
@@ -19,22 +21,35 @@ public class CharacterController : MonoBehaviour
     [SerializeField] private Camera m_Camera;
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseFovKick;
-    [SerializeField] private FOVKick m_FovKick = new FOVKick();
+    [SerializeField] private FOVKick m_FovKick;
+    #endregion
 
-    #region private
+    #region Sound Variables
+    [SerializeField] private AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
+    [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
+    [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
+    #endregion
+
+    #region Private Variables
+    private AudioSource m_AudioSource;
     private CharacterMotor motor;
     private Vector3 _velocity;
 
     private float _xHeadRot;
     private float _yHeadRot;
+    private bool m_IsGround;
     #endregion
 
     private void Start()
     {
-        m_MouseLook.CursorVisible(false);
-        motor = GetComponent<CharacterMotor>();
-        m_MouseLook = GetComponent<MouseLook>();
+        m_FovKick = new FOVKick();
         m_FovKick.Setup(m_Camera);
+        
+        m_MouseLook = GetComponent<MouseLook>();
+        m_MouseLook.CursorVisible(false);
+
+        motor = GetComponent<CharacterMotor>();
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => CharacterMove(ctx.ReadValue<Vector2>());
@@ -60,6 +75,7 @@ public class CharacterController : MonoBehaviour
             m_FovKick.FOVKickUp();
         }
         Debug.Log("momevent input " + _movementInput);
+        PlayFootStepAudio();
     }
     private void CharacterRotation(Vector2 _rotationInput)
     {
@@ -82,9 +98,33 @@ public class CharacterController : MonoBehaviour
     }
     private void CharacterJamp()
     {
+        if (!m_IsGround) return;
         Vector3 _jamp = new Vector3(0f, 100f, 0f) * jampForces;
         motor.PerformJamp(_jamp);
         Debug.Log("Jamp");
     }
     private void UIManager() { m_MouseLook.CursorVisible(); }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        m_IsGround = true;
+    }
+    private void OnTriggerExit(Collider col)
+    {
+        m_IsGround = false;
+    }
+    #region Sound
+    private void PlayFootStepAudio()
+    {
+        if (!m_IsGround) return;
+        // pick & play a random footstep sound from the array,
+        // excluding sound at index 0
+        int n = Random.Range(1, m_FootstepSounds.Length);
+        m_AudioSource.clip = m_FootstepSounds[n];
+        m_AudioSource.PlayOneShot(m_AudioSource.clip);
+        // move picked sound to index 0 so it's not picked next time
+        m_FootstepSounds[n] = m_FootstepSounds[0];
+        m_FootstepSounds[0] = m_AudioSource.clip;
+    }
+    #endregion
 }
