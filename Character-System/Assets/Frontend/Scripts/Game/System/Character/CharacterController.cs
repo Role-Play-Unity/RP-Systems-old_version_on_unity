@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(MouseLook))]
 [RequireComponent(typeof(CharacterMotor))]
+[RequireComponent(typeof(CharacterHeadShake))]
 public class CharacterController : MonoBehaviour
 {
     [SerializeField]
@@ -14,10 +16,9 @@ public class CharacterController : MonoBehaviour
     private float mouseSensivity = 5f;
     [SerializeField]
     private float jampForces = 2f;
-    [SerializeField] private Vector4 headLimitRotation;
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseFovKick;
-    [SerializeField] private CharacterHeadShake headShake;
+    [SerializeField] private CharacterHeadShake m_HeadShake;
 
     #region private
     private CharacterMotor motor;
@@ -31,6 +32,7 @@ public class CharacterController : MonoBehaviour
     {
         m_MouseLook.CursorVisible(false);
         motor = GetComponent<CharacterMotor>();
+        m_MouseLook = GetComponent<MouseLook>();
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => CharacterMove(ctx.ReadValue<Vector2>());
@@ -48,12 +50,12 @@ public class CharacterController : MonoBehaviour
         if (_movementInput.y > 0.7f)
         {
             motor.Move(_velocity * RunningSpeed); //Run move
-            headShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
+            m_HeadShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
         }
         else
         {
             motor.Move(_velocity * DefaultSpeed); //Defaut move
-            headShake.ShakeRotateCamera(0.2f, 0.5f, Vector2.right + Vector2.down);
+            m_HeadShake.ShakeRotateCamera(0.2f, 0.5f, Vector2.right + Vector2.down);
         }
         //headShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
         Debug.Log("momevent input " + _movementInput);
@@ -72,7 +74,7 @@ public class CharacterController : MonoBehaviour
     {
         //Calculate head rotation as a 3D vector (turning around)
         _xHeadRot += _headRotationInput.y * mouseSensivity;
-        _xHeadRot = Mathf.Clamp(_xHeadRot, headLimitRotation.x, headLimitRotation.y);
+        _xHeadRot = Mathf.Clamp(_xHeadRot, m_MouseLook.LimitY.x, m_MouseLook.LimitY.y);
         Vector3 headRotation = new Vector3(_xHeadRot, 0f);
         //Apply rotation
         motor.HeadRotate(headRotation);
