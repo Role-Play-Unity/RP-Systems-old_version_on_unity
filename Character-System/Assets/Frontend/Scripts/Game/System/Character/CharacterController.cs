@@ -15,6 +15,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float jampForces = 2f;
     [SerializeField] private Vector4 headLimitRotation;
+    [SerializeField] private MouseLook m_MouseLook;
+    [SerializeField] private bool m_UseFovKick;
     [SerializeField] private CharacterHeadShake headShake;
 
     #region private
@@ -27,6 +29,7 @@ public class CharacterController : MonoBehaviour
 
     private void Start()
     {
+        m_MouseLook.CursorVisible(false);
         motor = GetComponent<CharacterMotor>();
     }
 
@@ -76,9 +79,9 @@ public class CharacterController : MonoBehaviour
     }
     private void CharacterJamp()
     {
-        //Vector3 _jamp = new Vector3(0f, 1f, 0f) * jampForces;
-        // motor.Jamp(_jamp);
+        Vector3 _jamp = new Vector3(0f, 100f, 0f) * jampForces;
+        motor.PerformJamp(_jamp);
+        Debug.Log("Jamp");
     }
-    private void UIManager() { MouseController.CursorVisible(); }
-
+    private void UIManager() { m_MouseLook.CursorVisible(); }
 }

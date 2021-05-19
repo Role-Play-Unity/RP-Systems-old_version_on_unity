@@ -7,7 +7,7 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "463fcd8a-b6ad-4990-8cac-f42f53914236",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -15,7 +15,7 @@
                 },
                 {
                     "name": "Rotation",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "332eec15-8a94-431f-8ec0-261d51323a1a",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -33,13 +33,13 @@
                     "name": "Jamp",
                     "type": "PassThrough",
                     "id": "0feae6cc-59c3-4298-b8d1-f2bd2b1f0e0f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Touch",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "OpenUI",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "7552d82d-3402-48ed-8bb4-fd3a23996db9",
                     "expectedControlType": "Button",
                     "processors": "",

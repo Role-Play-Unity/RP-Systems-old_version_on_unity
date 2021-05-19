@@ -34,6 +34,7 @@ public class CharacterMotor : MonoBehaviour
     {
         rotation = _rotation;
     }
+
     //Run every phisics iteration
     void FixedUpdate()
     {
@@ -74,8 +75,8 @@ public class CharacterMotor : MonoBehaviour
 
 
     //Perform jamp base on velocity variable
-    void PerformJamp()
+    public void PerformJamp(Vector3 _jamp)
     {
-
+        rb.AddForce(rb.mass * _jamp);
     }
 }
