@@ -16,9 +16,10 @@ public class CharacterController : MonoBehaviour
     private float mouseSensivity = 5f;
     [SerializeField]
     private float jampForces = 2f;
+    [SerializeField] private Camera m_Camera;
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseFovKick;
-    [SerializeField] private CharacterHeadShake m_HeadShake;
+    [SerializeField] private FOVKick m_FovKick = new FOVKick();
 
     #region private
     private CharacterMotor motor;
@@ -33,6 +34,7 @@ public class CharacterController : MonoBehaviour
         m_MouseLook.CursorVisible(false);
         motor = GetComponent<CharacterMotor>();
         m_MouseLook = GetComponent<MouseLook>();
+        m_FovKick.Setup(m_Camera);
     }
 
     public void OnMove(InputAction.CallbackContext ctx) => CharacterMove(ctx.ReadValue<Vector2>());
@@ -50,14 +52,13 @@ public class CharacterController : MonoBehaviour
         if (_movementInput.y > 0.7f)
         {
             motor.Move(_velocity * RunningSpeed); //Run move
-            m_HeadShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
+            m_FovKick.FOVKickDown();
         }
         else
         {
             motor.Move(_velocity * DefaultSpeed); //Defaut move
-            m_HeadShake.ShakeRotateCamera(0.2f, 0.5f, Vector2.right + Vector2.down);
+            m_FovKick.FOVKickUp();
         }
-        //headShake.ShakeRotateCamera(0.1f, 0.5f, Vector2.right + Vector2.down);
         Debug.Log("momevent input " + _movementInput);
     }
     private void CharacterRotation(Vector2 _rotationInput)
