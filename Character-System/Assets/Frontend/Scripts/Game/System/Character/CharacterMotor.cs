@@ -9,9 +9,11 @@ public class CharacterMotor : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
     private Vector3 headRotation;
-    private Vector3 jampForces = Vector3.zero;
 
     private Rigidbody rb;
+
+    public delegate void OnMove();
+    public event OnMove EnentOnMove;
 
     private void Start()
     {
@@ -49,6 +51,7 @@ public class CharacterMotor : MonoBehaviour
         if (velocity != Vector3.zero)
         {
             rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            EnentOnMove.Invoke();
         }
     }
 
@@ -58,7 +61,7 @@ public class CharacterMotor : MonoBehaviour
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
         if (velocity != Vector3.zero)
         {
-            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            //rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
         }
     }
 

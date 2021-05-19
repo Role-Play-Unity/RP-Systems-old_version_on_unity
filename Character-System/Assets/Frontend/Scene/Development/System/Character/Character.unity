@@ -1080,17 +1080,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935831837}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &2095752878 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3252970995072228738, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
-  m_PrefabInstance: {fileID: 3252970996600634156}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0630f7b271bc93a4d9866f08a9cbce57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3252970996600634156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1209,15 +1198,15 @@ PrefabInstance:
     - target: {fileID: 3252970995072228766, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2095752878}
+      objectReference: {fileID: 0}
     - target: {fileID: 3252970995072228766, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
       propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2095752878}
+      objectReference: {fileID: 0}
     - target: {fileID: 3252970995072228766, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2095752878}
+      objectReference: {fileID: 0}
     - target: {fileID: 3252970995072228766, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1266,5 +1255,26 @@ PrefabInstance:
       propertyPath: m_ActionEvents.Array.data[5].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 5616576954096824084, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
+      propertyPath: m_Mass
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5616576954096824084, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 6671773747708048297, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
+      propertyPath: m_UseFovKick
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7372236025192498050, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
+      propertyPath: Sensitivity.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7372236025192498050, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
+      propertyPath: Sensitivity.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3252970995072228738, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 08975077ebad6f143a95ef9e2a8bdfe4, type: 3}

@@ -105,13 +105,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3252970995072228765}
-  - component: {fileID: 3252970995072228764}
-  - component: {fileID: 3252970995072228739}
-  - component: {fileID: 3252970995072228738}
   - component: {fileID: 3252970995072228766}
+  - component: {fileID: 7372236025192498050}
+  - component: {fileID: 2747168803793956549}
+  - component: {fileID: 5616576954096824084}
+  - component: {fileID: 282362392921390055}
+  - component: {fileID: 7861779520504716010}
+  - component: {fileID: 6671773747708048297}
   m_Layer: 0
   m_Name: Character Controller
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,54 +140,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &3252970995072228764
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3252970995072228737}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!114 &3252970995072228739
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3252970995072228737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96687f4cbce30ab4c91c5570f59e1e20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  head: {fileID: 3252970996350894120}
---- !u!114 &3252970995072228738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3252970995072228737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0630f7b271bc93a4d9866f08a9cbce57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultSpeed: 3
-  RunningSpeed: 6
-  CroughtSpeed: 1
-  mouseSensivity: 5
-  jampForces: 2
-  headLimitRotation: {x: -45, y: 45, z: 0, w: 0}
-  headShake: {fileID: 3252970996322381350}
 --- !u!114 &3252970995072228766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +167,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3252970995072228738}
+      - m_Target: {fileID: 6671773747708048297}
         m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
@@ -228,7 +183,7 @@ MonoBehaviour:
     m_ActionName: Character/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3252970995072228738}
+      - m_Target: {fileID: 6671773747708048297}
         m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
         m_MethodName: OnRotation
         m_Mode: 0
@@ -243,14 +198,10 @@ MonoBehaviour:
     m_ActionId: 332eec15-8a94-431f-8ec0-261d51323a1a
     m_ActionName: Character/Rotation Head[/Mouse/position]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 039ba1e1-8c42-438a-957d-aac4baa2c3db
-    m_ActionName: Character/Actions[/Keyboard/leftMeta]
-  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3252970995072228738}
+      - m_Target: {fileID: 6671773747708048297}
         m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
-        m_MethodName: OnMoveRun
+        m_MethodName: OnAction
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -260,19 +211,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 1378ebd5-deb4-47e9-a423-954743686b52
-    m_ActionName: Character/New action
+    m_ActionId: 039ba1e1-8c42-438a-957d-aac4baa2c3db
+    m_ActionName: Character/Actions[/Keyboard/leftMeta]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6671773747708048297}
+        m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
+        m_MethodName: OnJamp
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0feae6cc-59c3-4298-b8d1-f2bd2b1f0e0f
     m_ActionName: Character/New action
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: dc144611-896e-487f-a433-c5e244c38efb
-    m_ActionName: Character/New action
-  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3252970995072228738}
+      - m_Target: {fileID: 6671773747708048297}
         m_TargetAssemblyTypeName: CharacterController, Assembly-CSharp
         m_MethodName: OnOpenUI
         m_Mode: 0
@@ -286,11 +245,223 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7552d82d-3402-48ed-8bb4-fd3a23996db9
     m_ActionName: Gameplay/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8287cab0-fccb-493d-83d3-fd9e677fefa4
+    m_ActionName: Car/Move
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Input Actions
+  m_DefaultControlScheme: Gamepad
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7372236025192498050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f1d98c929114f4b9fdf1512e4d6285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sensitivity: {x: 0.7, y: 0.1}
+  LimitX: {x: -100, y: 100}
+  LimitY: {x: -90, y: 90}
+  lockCursor: 1
+--- !u!82 &2747168803793956549
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!54 &5616576954096824084
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  serializedVersion: 2
+  m_Mass: 150
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!114 &282362392921390055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96687f4cbce30ab4c91c5570f59e1e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  head: {fileID: 3252970996350894120}
+--- !u!114 &7861779520504716010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e156fba35214a48b538b6398ed648d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6671773747708048297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3252970995072228737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0630f7b271bc93a4d9866f08a9cbce57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultSpeed: 3
+  RunningSpeed: 6
+  jampForces: 2
+  m_Camera: {fileID: 3252970996322381344}
+  m_MouseLook: {fileID: 7372236025192498050}
+  m_UseFovKick: 1
+  m_FovKick:
+    Camera: {fileID: 3252970996322381344}
+    originalFov: 0
+    FOVIncrease: 3
+    TimeToIncrease: 1
+    TimeToDecrease: 1
+    IncreaseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  m_FootstepSounds:
+  - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
+  - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
+  - {fileID: 8300000, guid: 5a9383dda6cabc047b7a297602e93eb4, type: 3}
+  - {fileID: 8300000, guid: e9714160ce34f2b4ab63ff8c27bd68e1, type: 3}
+  m_JumpSound: {fileID: 8300000, guid: 5897aeed9b676024fbb8c694b421a861, type: 3}
+  m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
 --- !u!1 &3252970995127029284
 GameObject:
   m_ObjectHideFlags: 0

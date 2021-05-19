@@ -13,7 +13,6 @@ public class FOVKick
     public float TimeToDecrease = 1f;               // the amount of time the field of view will take to return to its original size
     public AnimationCurve IncreaseCurve;
 
-
     public void Setup(Camera camera)
     {
         CheckStatus(camera);
@@ -36,7 +35,6 @@ public class FOVKick
                 "FOVKick Increase curve is null, please define the curve for the field of view kicks");
         }
     }
-
 
     public void ChangeCamera(Camera camera)
     {
