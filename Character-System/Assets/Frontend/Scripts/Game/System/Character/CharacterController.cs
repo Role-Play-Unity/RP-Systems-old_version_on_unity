@@ -73,9 +73,11 @@ public class CharacterController : MonoBehaviour
         if (_movementInput.y > 0.7f)
         {
             m_Motor.Move(_velocity * m_RunningSpeed); //Run move
+            m_IsRun = true;
         }
         else
         {
+            m_IsRun = false;
             m_Motor.Move(_velocity * m_DefaultSpeed); //Defaut move
         }
         Debug.Log("momevent input " + _movementInput);
