@@ -61,7 +61,7 @@ public class CharacterMotor : MonoBehaviour
         rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
         if (velocity != Vector3.zero)
         {
-            //rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
         }
     }
 
@@ -78,8 +78,8 @@ public class CharacterMotor : MonoBehaviour
 
 
     //Perform jamp base on velocity variable
-    public void PerformJamp(Vector3 _jamp)
+    public void PerformJump(Vector3 _jump)
     {
-        rb.AddForce(rb.mass * _jamp);
+        rb.AddForce(rb.mass * _jump);
     }
 }

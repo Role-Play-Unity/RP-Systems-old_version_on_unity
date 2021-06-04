@@ -58,7 +58,7 @@ public class CharacterController : MonoBehaviour
     public void OnMove(InputAction.CallbackContext ctx) => CharacterMove(ctx.ReadValue<Vector2>());
     public void OnRotation(InputAction.CallbackContext ctx) => CharacterRotation(ctx.ReadValue<Vector2>());
     public void OnAction(InputAction.CallbackContext ctx) => Action();
-    public void OnJamp(InputAction.CallbackContext ctx) => CharacterJamp();
+    public void OnJamp(InputAction.CallbackContext ctx) => CharacterJump();
     public void OnOpenUI(InputAction.CallbackContext ctx) => UIManager();
     #endregion
 
@@ -105,13 +105,14 @@ public class CharacterController : MonoBehaviour
         //Apply rotation
         m_Motor.HeadRotate(headRotation);
     }
-    private void CharacterJamp()
+    private void CharacterJump()
     {
         if (!m_IsGround) return;
-        Vector3 _jamp = new Vector3(0f, 100f, 0f) * m_JumpForces;
-        m_Motor.PerformJamp(_jamp);
+        Vector3 _jump = new Vector3(0f, 100f, 0f) * m_JumpForces;
+        m_Motor.PerformJump(_jump);
         PlayJumpSound();
-        Debug.Log("Jamp");
+        Debug.Log("Jump");
+        m_IsGround = false;
     }
     #endregion
 
@@ -119,13 +120,20 @@ public class CharacterController : MonoBehaviour
     private void Action() {}
 
     #region Trigger
+    void OnCollisionEnter(Collision other)
+    {
+        // If we have collided with the platform
+        //if (other.gameObject.tag == "Ground") { }
+        // Then we must be on the ground
+        m_IsGround = true;
+    }
     private void OnTriggerEnter(Collider col)
     {
-        m_IsGround = true;
+
     }
     private void OnTriggerExit(Collider col)
     {
-        m_IsGround = false;
+
     }
     #endregion
 
