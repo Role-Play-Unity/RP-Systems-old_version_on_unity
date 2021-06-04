@@ -133,6 +133,7 @@ public class CharacterController : MonoBehaviour
     private void PlayFootStepSound()
     {
         if (!m_IsGround) return;
+        if (m_AudioSource.isPlaying) return;
         // pick & play a random footstep sound from the array,
         // excluding sound at index 0
         int n = Random.Range(0, m_FootstepSounds.Length);
