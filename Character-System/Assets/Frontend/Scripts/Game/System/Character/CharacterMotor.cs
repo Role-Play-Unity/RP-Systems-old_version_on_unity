@@ -7,7 +7,7 @@ public class CharacterMotor : MonoBehaviour
 {
     [SerializeField] private Transform head;
     private Vector3 velocity = Vector3.zero;
-    private Vector3 rotation = Vector3.zero;
+    private Vector3 bodyRotation = Vector3.zero;
     private Vector3 headRotation;
 
     private Rigidbody rb;
@@ -32,9 +32,9 @@ public class CharacterMotor : MonoBehaviour
     }
     
     //Gets a rotational vector
-    public void Rotate(Vector3 _rotation)
+    public void BodyRotate(Vector3 _bodyRotation)
     {
-        rotation = _rotation;
+        bodyRotation = _bodyRotation;
     }
 
     //Run every phisics iteration
@@ -50,32 +50,23 @@ public class CharacterMotor : MonoBehaviour
     {
         if (velocity != Vector3.zero)
         {
-            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + velocity);
             EnentOnMove.Invoke();
         }
     }
 
     //Perform rotation base on velocity variable
-    void PerformRotation()
-    {
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
-        if (velocity != Vector3.zero)
-        {
-            rb.MovePosition(rb.position + velocity * Time.fixedDeltaTime);
-        }
-    }
+    void PerformRotation() => rb.MoveRotation(rb.rotation * Quaternion.Euler(bodyRotation));
+    
 
     //Perform head rotation base on velocity variable
     void PerformHeadRotation()
     {
         if(head != null)
         {
-            //head.Rotate(-headRotation);
             head.localEulerAngles =-headRotation;
         }
     }
-
-
 
     //Perform jamp base on velocity variable
     public void PerformJump(Vector3 _jump)

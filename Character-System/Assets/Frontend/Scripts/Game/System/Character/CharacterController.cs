@@ -56,7 +56,7 @@ public class CharacterController : MonoBehaviour
 
     #region Inputs
     public void OnMove(InputAction.CallbackContext ctx) => CharacterMove(ctx.ReadValue<Vector2>());
-    public void OnRotation(InputAction.CallbackContext ctx) => CharacterRotation(ctx.ReadValue<Vector2>());
+    public void OnRotation(InputAction.CallbackContext ctx) => CharacterBodyRotation(ctx.ReadValue<Vector2>());
     public void OnAction(InputAction.CallbackContext ctx) => Action();
     public void OnJamp(InputAction.CallbackContext ctx) => CharacterJump();
     public void OnOpenUI(InputAction.CallbackContext ctx) => UIManager();
@@ -65,6 +65,7 @@ public class CharacterController : MonoBehaviour
     #region Character
     private void CharacterMove(Vector2 _movementInput)
     {
+        if (!m_IsGround) return;
         //Calculate movement velocity as a 3D vector
         Vector3 _movHorizontal = transform.right * _movementInput.x;
         Vector3 _movVertical = transform.forward * _movementInput.y;
@@ -72,13 +73,13 @@ public class CharacterController : MonoBehaviour
         //Apply movement
         if (_movementInput.y > 0.7f)
         {
-            m_Motor.Move(_velocity * m_RunningSpeed); //Run move
+            m_Motor.Move(_velocity * m_RunningSpeed * Time.fixedDeltaTime); //Run move
             m_IsRun = true;
         }
         else
         {
             m_IsRun = false;
-            m_Motor.Move(_velocity * m_DefaultSpeed); //Defaut move
+            m_Motor.Move(_velocity * m_DefaultSpeed * Time.fixedDeltaTime); //Defaut move
         }
         Debug.Log("momevent input " + _movementInput);
     }
@@ -87,17 +88,19 @@ public class CharacterController : MonoBehaviour
         if (m_IsRun) m_FovKick.FOVKickDown();
         else m_FovKick.FOVKickUp();  
     }
-    private void CharacterRotation(Vector2 _rotationInput)
+    private void CharacterBodyRotation(Vector2 _rotationInput)
     {
+        if (!m_IsGround) return;
         _yHeadRot = _rotationInput.x * m_MouseLook.Sensitivity.x;
         Vector3 rotation = new Vector3(0f, _yHeadRot, 0f);
         //Apply rotation
-        m_Motor.Rotate(rotation);
+        m_Motor.BodyRotate(rotation);
         CharacterHeadRotation(_rotationInput);
         Debug.Log("rotation input " + _rotationInput);
     }
     private void CharacterHeadRotation(Vector2 _headRotationInput)
     {
+        if (!m_IsGround) return;
         //Calculate head rotation as a 3D vector (turning around)
         _xHeadRot += _headRotationInput.y * m_MouseLook.Sensitivity.y;
         _xHeadRot = Mathf.Clamp(_xHeadRot, m_MouseLook.LimitY.x, m_MouseLook.LimitY.y);
@@ -150,6 +153,7 @@ public class CharacterController : MonoBehaviour
     }
     private void PlayJumpSound()
     {
+        if (m_IsGround) return;
         m_AudioSource.clip = m_JumpSound;
         m_AudioSource.Play();
     }
