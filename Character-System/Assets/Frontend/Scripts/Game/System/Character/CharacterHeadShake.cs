@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CharacterHeadShake : MonoBehaviour
@@ -49,3 +50,22 @@ public class CharacterHeadShake : MonoBehaviour
         transform.localRotation = startRotation;
     }
 }
+
+
+// Custom Editor
+#if UNITY_EDITOR
+[CustomEditor(typeof(CharacterHeadShake)), InitializeOnLoadAttribute]
+public class CharacterHeadShakeEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        EditorGUILayout.Space();
+        GUILayout.Label("RP First Person Controller - Head Shake", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+        GUILayout.Label("By Life is Wolf", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+        GUILayout.Label("version 0.0.5", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+    }
+}
+#endif

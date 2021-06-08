@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MLAPI;
+using UnityEditor;
 
 [RequireComponent(typeof(MouseLook))]
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(CharacterMotor))]
 [RequireComponent(typeof(CharacterHeadShake))]
-public class CharacterController : MonoBehaviour
+public class CharacterController : NetworkBehaviour
 {
     #region Variables
-    [SerializeField]
-    private float m_DefaultSpeed = 3f;
-    [SerializeField]
-    private float m_RunningSpeed = 6f;
-    [SerializeField]
-    private float m_JumpForces = 2f;
+    [SerializeField] private float m_DefaultSpeed = 3f;
+    [SerializeField] private float m_RunningSpeed = 6f;
+    [SerializeField] private float m_JumpForces = 2f;
+    [SerializeField] private LayerMask layerMask;
     [SerializeField] private Camera m_Camera;
     [SerializeField] private MouseLook m_MouseLook;
     [SerializeField] private bool m_UseFovKick;
@@ -41,17 +41,28 @@ public class CharacterController : MonoBehaviour
 
     private void Start()
     {
-        m_FovKick.Setup(m_Camera);
-        
-        m_MouseLook = GetComponent<MouseLook>();
-        m_MouseLook.CursorVisible(false);
+        if (IsLocalPlayer)
+        {
+            m_FovKick.Setup(m_Camera);
 
-        m_Motor = GetComponent<CharacterMotor>();
-        m_AudioSource = GetComponent<AudioSource>();
+            m_MouseLook = GetComponent<MouseLook>();
+            m_MouseLook.CursorVisible(false);
+
+            m_Motor = GetComponent<CharacterMotor>();
+            m_AudioSource = GetComponent<AudioSource>();
 
 
-        m_Motor.EnentOnMove += PlayFootStepSound;
-        m_Motor.EnentOnMove += MoveFovKick;
+            m_Motor.OnMoveEnent += PlayFootStepSound;
+            m_Motor.OnMoveEnent += MoveFovKick;
+
+            layerMask = 1 << gameObject.layer | 1 << 2;
+            layerMask = ~layerMask;
+        }
+        else //IsLocalPlayer = false
+        {
+            m_Camera.enabled = false;
+            m_Camera.GetComponent<AudioListener>().enabled = false;
+        }
     }
 
     #region Inputs
@@ -62,67 +73,83 @@ public class CharacterController : MonoBehaviour
     public void OnOpenUI(InputAction.CallbackContext ctx) => UIManager();
     #endregion
 
-    #region Character
+    #region Character Movement and Rotation
     private void CharacterMove(Vector2 _movementInput)
     {
+        if (!IsLocalPlayer) return;
         if (!m_IsGround) return;
+
         //Calculate movement velocity as a 3D vector
         Vector3 _movHorizontal = transform.right * _movementInput.x;
         Vector3 _movVertical = transform.forward * _movementInput.y;
-        _velocity = (_movHorizontal + _movVertical).normalized;
-        //Apply movement
+
+        // Final movement vector
+        Vector3 _velocity = (_movHorizontal + _movVertical).normalized;
+        //Vector3 _velocity = (_movHorizontal + _movVertical);
+
         if (_movementInput.y > 0.7f)
         {
-            m_Motor.Move(_velocity * m_RunningSpeed * Time.fixedDeltaTime); //Run move
+            _velocity *= m_RunningSpeed; //Run move
             m_IsRun = true;
         }
         else
         {
+            _velocity *= m_DefaultSpeed; //Defaut
             m_IsRun = false;
-            m_Motor.Move(_velocity * m_DefaultSpeed * Time.fixedDeltaTime); //Defaut move
         }
-        Debug.Log("momevent input " + _movementInput);
+
+        // Animate movement
+        //animator.SetFloat("", _movementInput.y);
+
+        //Apply movement
+        m_Motor.Move(_velocity);
     }
     private void MoveFovKick()
     {
         if (m_IsRun) m_FovKick.FOVKickDown();
-        else m_FovKick.FOVKickUp();  
+        else m_FovKick.FOVKickUp();
     }
     private void CharacterBodyRotation(Vector2 _rotationInput)
     {
+        if (!IsLocalPlayer) return;
+        CharacterHeadRotation(_rotationInput);
         if (!m_IsGround) return;
+
+        //Calculate rotation as a 3D vector (turning around)
         _yHeadRot = _rotationInput.x * m_MouseLook.Sensitivity.x;
+
         Vector3 rotation = new Vector3(0f, _yHeadRot, 0f);
+
         //Apply rotation
         m_Motor.BodyRotate(rotation);
-        CharacterHeadRotation(_rotationInput);
-        Debug.Log("rotation input " + _rotationInput);
     }
     private void CharacterHeadRotation(Vector2 _headRotationInput)
     {
-        if (!m_IsGround) return;
         //Calculate head rotation as a 3D vector (turning around)
         _xHeadRot += _headRotationInput.y * m_MouseLook.Sensitivity.y;
+
         _xHeadRot = Mathf.Clamp(_xHeadRot, m_MouseLook.LimitY.x, m_MouseLook.LimitY.y);
         Vector3 headRotation = new Vector3(_xHeadRot, 0f);
-        //Apply rotation
+
+        //Apply camera rotation
         m_Motor.HeadRotate(headRotation);
     }
     private void CharacterJump()
     {
         if (!m_IsGround) return;
-        Vector3 _jump = new Vector3(0f, 100f, 0f) * m_JumpForces;
-        m_Motor.PerformJump(_jump);
+        if (!IsLocalPlayer) return;
+
+        m_Motor.PerformJump(m_JumpForces);
         PlayJumpSound();
-        Debug.Log("Jump");
+
         m_IsGround = false;
     }
     #endregion
 
     private void UIManager() { m_MouseLook.CursorVisible(); }
-    private void Action() {}
+    private void Action() { }
 
-    #region Trigger
+    #region Trigger and Collision
     void OnCollisionEnter(Collision other)
     {
         // If we have collided with the platform
@@ -143,7 +170,7 @@ public class CharacterController : MonoBehaviour
     #region Sound
     private void PlayFootStepSound()
     {
-        if (!m_IsGround) return;
+        if (!GetJump()) return;
         if (m_AudioSource.isPlaying) return;
         // pick & play a random footstep sound from the array,
         // excluding sound at index 0
@@ -158,4 +185,40 @@ public class CharacterController : MonoBehaviour
         m_AudioSource.Play();
     }
     #endregion
+
+
+    #region Get
+    bool GetJump()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        if (Physics.Raycast(ray, out hit, m_JumpForces, layerMask))
+        {
+            return true;
+        }
+
+        return false;
+    }
+    #endregion
 }
+
+
+
+
+// Custom Editor
+#if UNITY_EDITOR
+[CustomEditor(typeof(CharacterController)), InitializeOnLoadAttribute]
+public class CharacterControllerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        EditorGUILayout.Space();
+        GUILayout.Label("RP First Person Controller", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold, fontSize = 16 });
+        GUILayout.Label("By Life is Wolf", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+        GUILayout.Label("version 0.0.1", new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Normal, fontSize = 12 });
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+    }
+}
+#endif
